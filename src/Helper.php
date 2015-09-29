@@ -67,11 +67,10 @@ class Helper extends baseHelper
                 case 'items':
                     $items = [];
                     foreach ($value as $item) {
-                        $itemCurrency = $item->getCurrency();
                         $items[] = [
                             'Name' => $item->getName(),
                             'Price' => $item->getPrice(),
-                            'Currency' => ($itemCurrency === 'TWD') ? '元' : $itemCurrency,
+                            'Currency' => static::currencyAlias($item->getCurrency()),
                             'Quantity' => $item->getQuantity(),
                             'URL' => $item->getUrl(),
                         ];
