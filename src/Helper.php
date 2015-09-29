@@ -118,7 +118,7 @@ class Helper extends baseHelper
         $signature = static::replaceChars($signature);
 
         // MD5 編碼
-        return md5($signature);
+        return strtoupper(md5($signature));
     }
 
     protected static function replaceChars($value)
