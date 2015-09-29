@@ -17,7 +17,7 @@ use Recca0120\AllPay\Constants\PrintMark;
 use Recca0120\AllPay\Constants\TaxType;
 use Recca0120\AllPay\ItemBag;
 
-abstract class AbstractRequest extends baseAbstractRequest
+abstract class AbstractRequestBak extends baseAbstractRequest
 {
     public $testEndPoint = 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut';
     public $liveEndPoint = 'https://payment.allpay.com.tw/Cashier/AioCheckOut';
