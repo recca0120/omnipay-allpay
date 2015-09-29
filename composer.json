@@ -1,0 +1,33 @@
+{
+    "name": "recca0120/omnipay-allpay",
+    "type": "library",
+    "description": "AllPay gateway for Omnipay payment processing library",
+    "keywords": [
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment",
+        "allpay",
+        "purchase"
+    ],
+    "homepage": "https://github.com/recca0120/omnipay-allpay",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Recca0120",
+            "email": "recca0120@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Recca0120\\AllPay\\" : "src/"
+        }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    }
+}
