@@ -115,7 +115,7 @@ class Helper extends baseHelper
         }
         $signature .= '&HashIV='.$hashIV;
         $signature = strtolower(urlencode($signature));
-        $signature = strtoupper(static::replaceChars($signature));
+        $signature = static::replaceChars($signature);
 
         // MD5 編碼
         return md5($signature);
