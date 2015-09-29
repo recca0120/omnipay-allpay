@@ -11,7 +11,7 @@ abstract class AbstractResponse extends baseAbstractResponse
     public function isSuccessful()
     {
         if ($this->successful === null) {
-            $signature = strtoupper($this->getRequest()->generateSignature($this->data));
+            $signature = $this->getRequest()->generateSignature($this->data);
             $this->successful = $signature === $this->data['CheckMacValue'];
         }
 

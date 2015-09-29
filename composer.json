@@ -13,18 +13,17 @@
     ],
     "homepage": "https://github.com/recca0120/omnipay-allpay",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Recca0120",
+    "authors": [{
+            "name": "Recca Tsai",
             "email": "recca0120@gmail.com"
-        }
-    ],
+        }],
     "autoload": {
         "psr-4": {
             "Recca0120\\AllPay\\" : "src/"
         }
     },
     "require": {
+        "php": ">=5.4",
         "omnipay/common": "~2.0"
     },
     "require-dev": {

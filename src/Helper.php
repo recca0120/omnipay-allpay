@@ -106,14 +106,35 @@ class Helper extends baseHelper
         ksort($parameters, SORT_NATURAL | SORT_FLAG_CASE);
         $signature = 'HashKey='.$hashKey;
         foreach ($parameters as $key => $value) {
+            // Customize to Skip Parameters for HikaShop
+            // Customize to Skip Parameters for MijoShop
+            if (in_array($key, ['view', 'hikashop_front_end_main', 'mijoshop_store_id', 'language'], true) === true) {
+                continue;
+            }
             $signature .= '&'.$key.'='.$value;
         }
         $signature .= '&HashIV='.$hashIV;
         $signature = strtolower(urlencode($signature));
-        $signature = static::replaceChars($signature);
+        $signature = strtoupper(static::replaceChars($signature));
 
         // MD5 編碼
         return md5($signature);
+    }
+
+    protected static function replaceChars($value)
+    {
+        // 取代為與 dotNet 相符的字元
+        $search_list = ['%2d', '%5f', '%2e', '%21', '%2a', '%28', '%29'];
+        $replace_list = ['-', '_', '.', '!', '*', '(', ')'];
+        $value = str_replace($search_list, $replace_list, $value);
+        if (session_status() == PHP_SESSION_NONE) {
+            // Customize for Magento
+            $value = str_replace('%3f___sid%3d'.session_id(), '', $value);
+            $value = str_replace('%3f___sid%3du', '', $value);
+            $value = str_replace('%3f___sid%3ds', '', $value);
+        }
+
+        return $value;
     }
 
     public static function purchaseData($data)
@@ -146,20 +167,6 @@ class Helper extends baseHelper
         }
 
         return $temp;
-    }
-
-    protected static function replaceChars($value)
-    {
-        // 取代為與 dotNet 相符的字元
-        $search_list = ['%2d', '%5f', '%2e', '%21', '%2a', '%28', '%29'];
-        $replace_list = ['-', '_', '.', '!', '*', '(', ')'];
-        $value = str_replace($search_list, $replace_list, $value);
-        // Customize for Magento
-        // $value = str_replace('%3f___sid%3d'.session_id(), '', $value);
-        // $value = str_replace('%3f___sid%3du', '', $value);
-        // $value = str_replace('%3f___sid%3ds', '', $value);
-
-        return $value;
     }
 
     public static function dumpMethods($obj, $parameters = [])
