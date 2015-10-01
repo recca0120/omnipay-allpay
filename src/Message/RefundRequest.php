@@ -16,9 +16,18 @@ class RefundRequest extends AbstractRequest
         $data = Helper::skipParameters($this->getParameters());
         $data['CheckMacValue'] = $this->generateSignature($data);
         $response = $this->httpClient->post($this->getEndPoint(), null, $data)->send();
-        $szResult = (string) $response->getBody();
-        dump($szResult);
-        dump($data);
-        exit;
+        $response = (string) $response->getBody();
+        // 檢查結果資料。
+        if ($response == '1|OK') {
+            $data['RtnCode'] = '1';
+            $data['RtnMsg'] = 'OK';
+        } else {
+            $response = explode('-', str_replace('0|', '', $response));
+            $data['RtnCode'] = $response[0];
+            $data['RtnMsg'] = $response[1];
+        }
+        $data['CheckMacValue'] = $this->generateSignature($data);
+
+        return $data;
     }
 }

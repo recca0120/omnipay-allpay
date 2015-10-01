@@ -81,16 +81,16 @@ class CompleteAuthorizeRequest extends AbstractRequest
             if (sizeof($arErrors) == 0) {
                 $data['CheckMacValue'] = $this->generateSignature($data);
                 $response = $this->httpClient->post($this->getEndPoint(), null, $data)->send();
-                $szResult = (string) $response->getBody();
-                $szResult = str_replace(' ', '%20', $szResult);
-                $szResult = str_replace('+', '%2B', $szResult);
-                // $szResult = str_replace('/', '%2F', $szResult);
-                // $szResult = str_replace('?', '%3F', $szResult);
-                // $szResult = str_replace('%', '%25', $szResult);
-                // $szResult = str_replace('#', '%23', $szResult);
-                // $szResult = str_replace('&', '%26', $szResult);
-                // $szResult = str_replace('=', '%3D', $szResult);
-                parse_str($szResult, $data);
+                $response = (string) $response->getBody();
+                $response = str_replace(' ', '%20', $response);
+                $response = str_replace('+', '%2B', $response);
+                // $response = str_replace('/', '%2F', $response);
+                // $response = str_replace('?', '%3F', $response);
+                // $response = str_replace('%', '%25', $response);
+                // $response = str_replace('#', '%23', $response);
+                // $response = str_replace('&', '%26', $response);
+                // $response = str_replace('=', '%3D', $response);
+                parse_str($response, $data);
             } else {
                 throw new InvalidRequestException(implode('- ', $arErrors));
             }
