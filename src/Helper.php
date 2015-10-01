@@ -9,6 +9,28 @@ use Omnipay\Common\Helper as baseHelper;
 
 class Helper extends baseHelper
 {
+    /**
+     * Initialize an object with a given array of parameters.
+     *
+     * Parameters are automatically converted to camelCase. Any parameters which do
+     * not match a setter on the target object are ignored.
+     *
+     * @param mixed $target     The object to set parameters on
+     * @param array $parameters An array of parameters to set
+     */
+    public static function initialize($target, $parameters)
+    {
+        if (is_array($parameters)) {
+            foreach ($parameters as $key => $value) {
+                // $method = 'set'.ucfirst(static::camelCase($key));
+                $method = 'set'.ucfirst($key);
+                if (method_exists($target, $method)) {
+                    $target->$method($value);
+                }
+            }
+        }
+    }
+
     public static function currencyAlias($currencyCode)
     {
         $currencyCode = strtoupper($currencyCode);
@@ -26,30 +48,9 @@ class Helper extends baseHelper
     public static function aliases($parameters, $skipParameters = [])
     {
         $data = [];
-        $aliases = [
-            'merchantId' => 'MerchantID',
-            'returnUrl' => 'ReturnURL',
-            'clientBackUrl' => 'ClientBackURL',
-            'orderResultUrl' => 'OrderResultURL',
-            // 'transactionId' => 'MerchantTradeNo',
-            'transactionReference' => 'MerchantTradeNo',
-            'amount' => 'TotalAmount',
-            'description' => 'TradeDesc',
-            'extraPaidInfo' => 'NeedExtraPaidInfo',
-            'platformId' => 'PlatformID',
-            'clientRedirectUrl' => 'ClientRedirectURL',
-            'paymentInfoUrl' => 'PaymentInfoURL',
-            'periodReturnUrl' => 'PeriodReturnURL',
-            'customerId' => 'CustomerID',
-            'desc1' => 'Desc_1',
-            'desc2' => 'Desc_2',
-            'desc3' => 'Desc_3',
-            'desc4' => 'Desc_4',
-        ];
-
         $skipParameters = array_merge([
-            'hashKey',
-            'hashIV',
+            'HashKey',
+            'HashIV',
             'testMode',
         ], $skipParameters);
 
@@ -64,7 +65,7 @@ class Helper extends baseHelper
                 // case 'currency':
                 //     $data[ucfirst($key)] = static::currencyAlias($value);
                 //     break;
-                case 'items':
+                case 'Items':
                     $items = [];
                     foreach ($value as $item) {
                         $items[] = [
@@ -78,11 +79,7 @@ class Helper extends baseHelper
                     $data['Items'] = $items;
                     break;
                 default:
-                    if (isset($aliases[$key]) === true) {
-                        $data[$aliases[$key]] = $value;
-                    } else {
-                        $data[ucfirst($key)] = $value;
-                    }
+                    $data[$key] = $value;
                     break;
             }
         }
@@ -93,7 +90,9 @@ class Helper extends baseHelper
 
     public static function generateSignature($hashKey, $hashIV, $parameters, $skipParameters = [])
     {
-        $skipParameters = array_merge(['CheckMacValue'], $skipParameters);
+        $skipParameters = array_merge([
+            'CheckMacValue',
+        ], $skipParameters);
 
         foreach ($skipParameters as $value) {
             if (isset($parameters[$value]) === true) {
@@ -181,12 +180,12 @@ class Helper extends baseHelper
             }
 
             $html .= <<<EOF
-public function set{$uc}(\$value) {
-    return \$this->setParameter('{$lc}', \$value);
+public function set{$value}(\$value) {
+    return \$this->setParameter('{$value}', \$value);
 }
 
-public function get{$uc}() {
-    return \$this->getParameter('{$lc}');
+public function get{$value}() {
+    return \$this->getParameter('{$value}');
 }
 
 

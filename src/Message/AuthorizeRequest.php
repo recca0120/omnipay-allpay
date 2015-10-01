@@ -36,71 +36,68 @@ class AuthorizeRequest extends AbstractRequest
     public function getDefaultParameters()
     {
         $send = [
-            'returnUrl' => 'http://www.allpay.com.tw/receive.php',
-            'clientBackUrl' => 'http://www.allpay.com.tw/receive.php',
-            'orderResultUrl' => '',
-            // Alias transactionId
-            // 'merchantTradeNo' => '',
-            'merchantTradeDate' => date('Y/m/d H:i:s'),
-            'paymentType' => 'aio',
-            // Alias amount
-            // 'totalAmount' => '',
-            // Alias description
-            // 'tradeDesc' => '',
-            'choosePayment' => PaymentMethod::ALL,
-            'remark' => '',
-            'chooseSubPayment' => PaymentMethodItem::NONE,
-            'needExtraPaidInfo' => ExtraPaymentInfo::NO,
-            'deviceSource' => DeviceType::PC,
-            'ignorePayment' => '',
-            'platformID' => '',
-            'invoiceMark' => InvoiceState::NO,
+            'ReturnURL' => '',
+            'ClientBackURL' => '',
+            'OrderResultURL' => '',
+            'MerchantTradeNo' => '',
+            'MerchantTradeDate' => date('Y/m/d H:i:s'),
+            'PaymentType' => 'aio',
+            'TotalAmount' => '',
+            'TradeDesc' => '',
+            'ChoosePayment' => PaymentMethod::ALL,
+            'Remark' => '',
+            'ChooseSubPayment' => PaymentMethodItem::NONE,
+            'NeedExtraPaidInfo' => ExtraPaymentInfo::NO,
+            'DeviceSource' => DeviceType::PC,
+            'IgnorePayment' => '',
+            'PlatformID' => '',
+            'InvoiceMark' => InvoiceState::NO,
         ];
 
         $sendExtend = [
             // ATM 延伸參數。
-            'expireDate' => 3,
+            'ExpireDate' => 3,
             // CVS, BARCODE 延伸參數。
-            'desc1' => '',
-            'desc2' => '',
-            'desc3' => '',
-            'desc4' => '',
+            'Desc_1' => '',
+            'Desc_2' => '',
+            'Desc_3' => '',
+            'Desc_4' => '',
             // ATM, CVS, BARCODE 延伸參數。
-            'clientRedirectUrl' => 'http://www.allpay.com.tw/ClientRedirectURL.php',
+            'ClientRedirectURL' => '',
             // Alipay 延伸參數。
-            'email' => '',
-            'phoneNo' => '',
-            'userName' => '',
+            'Email' => '',
+            'PhoneNo' => '',
+            'UserName' => '',
             // Tenpay 延伸參數。
-            'expireTime' => '',
+            'ExpireTime' => '',
             // Credit 分期延伸參數。
-            'creditInstallment' => 0,
-            'installmentAmount' => 0,
-            'redeem' => false,
-            'unionPay' => false,
+            'CreditInstallment' => 0,
+            'InstallmentAmount' => 0,
+            'Redeem' => false,
+            'UnionPay' => false,
             // Credit 定期定額延伸參數。
-            'periodAmount' => '',
-            'periodType' => '',
-            'frequency' => '',
-            'execTimes' => '',
+            'PeriodAmount' => '',
+            'PeriodType' => '',
+            'Frequency' => '',
+            'ExecTimes' => '',
             // 回傳網址的延伸參數。
-            'paymentInfoUrl' => 'http://www.allpay.com.tw/paymentinfo.php',
-            'periodReturnUrl' => '',
+            'PaymentInfoURL' => '',
+            'PeriodReturnURL' => '',
             // 電子發票延伸參數。
-            'customerIdentifier' => '',
-            'carruerType' => CarruerType::NONE,
-            'customerId' => '',
-            'donation' => Donation::NO,
-            'print' => PrintMark::NO,
-            'customerName' => '',
-            'customerAddr' => '',
-            'customerPhone' => '',
-            'customerEmail' => '',
-            'clearanceMark' => '',
-            'carruerNum' => '',
-            'loveCode' => '',
-            'invoiceRemark' => '',
-            'delayDay' => 0,
+            'CustomerIdentifier' => '',
+            'CarruerType' => CarruerType::NONE,
+            'CustomerID' => '',
+            'Donation' => Donation::NO,
+            'Print' => PrintMark::NO,
+            'CustomerName' => '',
+            'CustomerAddr' => '',
+            'CustomerPhone' => '',
+            'CustomerEmail' => '',
+            'ClearanceMark' => '',
+            'CarruerNum' => '',
+            'LoveCode' => '',
+            'InvoiceRemark' => '',
+            'DelayDay' => 0,
         ];
 
         return array_merge($send, $sendExtend);
@@ -108,8 +105,7 @@ class AuthorizeRequest extends AbstractRequest
 
     public function getData()
     {
-        $data = array_merge($this->getDefaultParameters(), $this->getParameters());
-        $data = Helper::aliases($data);
+        $data = Helper::aliases(array_merge($this->getDefaultParameters(), $this->getParameters()));
 
         // 變數宣告。
         $arErrors = [];
@@ -373,7 +369,7 @@ class AuthorizeRequest extends AbstractRequest
                     array_push($arErrors, 'ClearanceMark max length as 1.');
                 } else {
                     // 請設定空字串，僅課稅類別為零稅率(Zero)時，此參數不可為空字串
-                    if ($data['TaxType'] == TaxType::Zero) {
+                    if ($data['TaxType'] == TaxType::ZERO) {
                         if ($data['ClearanceMark'] != ClearanceMark::YES and $data['ClearanceMark'] != ClearanceMark::NO) {
                             array_push($arErrors, 'ClearanceMark is required.');
                         }
@@ -390,20 +386,20 @@ class AuthorizeRequest extends AbstractRequest
                 } else {
                     switch ($data['CarruerType']) {
                         // 載具類別為無載具(None)或會員載具(Member)時，請設定空字串
-                        case CarruerType::None:
-                        case CarruerType::Member:
+                        case CarruerType::NONE:
+                        case CarruerType::MEMBER:
                             if (strlen($data['CarruerNum']) > 0) {
                                 array_push($arErrors, 'Please remove CarruerNum.');
                             }
                             break;
                         // 載具類別為買受人自然人憑證(Citizen)時，請設定自然人憑證號碼，前2碼為大小寫英文，後14碼為數字
-                        case CarruerType::Citizen:
+                        case CarruerType::CITIZEN:
                             if (! preg_match('/^[a-zA-Z]{2}\d{14}$/', $data['CarruerNum'])) {
                                 array_push($arErrors, 'Invalid CarruerNum.');
                             }
                             break;
                         // 載具類別為買受人手機條碼(Cellphone)時，請設定手機條碼，第1碼為「/」，後7碼為大小寫英文、數字、「+」、「-」或「.」
-                        case CarruerType::Cellphone:
+                        case CarruerType::CELLPHONE:
                             if (! preg_match('/^\/{1}[0-9a-zA-Z+-.]{7}$/', $data['CarruerNum'])) {
                                 array_push($arErrors, 'Invalid CarruerNum.');
                             }
@@ -756,463 +752,683 @@ class AuthorizeRequest extends AbstractRequest
         return $this->response;
     }
 
-    public function setClientBackUrl($value)
+    public function setAmount($value)
     {
-        return $this->setParameter('clientBackUrl', $value);
+        return $this->setTotalAmount($value);
     }
 
-    public function getClientBackUrl()
+    public function getAmount()
     {
-        return $this->getParameter('clientBackUrl');
-    }
-
-    public function setDeviceSource($value)
-    {
-        return $this->setParameter('deviceSource', $value);
-    }
-
-    public function getDeviceSource()
-    {
-        return $this->getParameter('deviceSource');
-    }
-
-    public function setOrderResultUrl($value)
-    {
-        return $this->setParameter('orderResultUrl', $value);
-    }
-
-    public function getOrderResultUrl()
-    {
-        return $this->getParameter('orderResultUrl');
+        return $this->setTotalAmount();
     }
 
     public function setMerchantTradeDate($value)
     {
-        return $this->setParameter('merchantTradeDate', $value);
+        return $this->setParameter('MerchantTradeDate', $value);
     }
 
     public function getMerchantTradeDate()
     {
-        return $this->getParameter('merchantTradeDate');
+        return $this->getParameter('MerchantTradeDate');
     }
 
     public function setPaymentType($value)
     {
-        return $this->setParameter('paymentType', $value);
+        return $this->setParameter('PaymentType', $value);
     }
 
     public function getPaymentType()
     {
-        return $this->getParameter('paymentType');
+        return $this->getParameter('PaymentType');
+    }
+
+    public function setTotalAmount($value)
+    {
+        return $this->setParameter('TotalAmount', $value);
+    }
+
+    public function getTotalAmount()
+    {
+        return $this->getParameter('TotalAmount');
+    }
+
+    public function setItemName($value)
+    {
+        return $this->setParameter('ItemName', $value);
+    }
+
+    public function getItemName()
+    {
+        return $this->getParameter('ItemName');
     }
 
     public function setChoosePayment($value)
     {
-        return $this->setParameter('choosePayment', $value);
+        return $this->setParameter('ChoosePayment', $value);
     }
 
     public function getChoosePayment()
     {
-        return $this->getParameter('choosePayment');
+        return $this->getParameter('ChoosePayment');
+    }
+
+    public function setDeviceSource($value)
+    {
+        return $this->setParameter('DeviceSource', $value);
+    }
+
+    public function getDeviceSource()
+    {
+        return $this->getParameter('DeviceSource');
+    }
+
+    public function setClientBackURL($value)
+    {
+        return $this->setParameter('ClientBackURL', $value);
+    }
+
+    public function getClientBackURL()
+    {
+        return $this->getParameter('ClientBackURL');
+    }
+
+    public function setItemURL($value)
+    {
+        return $this->setParameter('ItemURL', $value);
+    }
+
+    public function getItemURL()
+    {
+        return $this->getParameter('ItemURL');
     }
 
     public function setRemark($value)
     {
-        return $this->setParameter('remark', $value);
+        return $this->setParameter('Remark', $value);
     }
 
     public function getRemark()
     {
-        return $this->getParameter('remark');
+        return $this->getParameter('Remark');
+    }
+
+    public function setReturnURL($value)
+    {
+        return $this->setParameter('ReturnURL', $value);
+    }
+
+    public function getReturnURL()
+    {
+        return $this->getParameter('ReturnURL');
     }
 
     public function setChooseSubPayment($value)
     {
-        return $this->setParameter('chooseSubPayment', $value);
+        return $this->setParameter('ChooseSubPayment', $value);
     }
 
     public function getChooseSubPayment()
     {
-        return $this->getParameter('chooseSubPayment');
+        return $this->getParameter('ChooseSubPayment');
+    }
+
+    public function setOrderResultURL($value)
+    {
+        return $this->setParameter('OrderResultURL', $value);
+    }
+
+    public function getOrderResultURL()
+    {
+        return $this->getParameter('OrderResultURL');
     }
 
     public function setNeedExtraPaidInfo($value)
     {
-        return $this->setParameter('needExtraPaidInfo', $value);
+        return $this->setParameter('NeedExtraPaidInfo', $value);
     }
 
     public function getNeedExtraPaidInfo()
     {
-        return $this->getParameter('needExtraPaidInfo');
+        return $this->getParameter('NeedExtraPaidInfo');
     }
 
     public function setIgnorePayment($value)
     {
-        return $this->setParameter('ignorePayment', $value);
+        return $this->setParameter('IgnorePayment', $value);
     }
 
     public function getIgnorePayment()
     {
-        return $this->getParameter('ignorePayment');
+        return $this->getParameter('IgnorePayment');
     }
 
     public function setPlatformID($value)
     {
-        return $this->setParameter('platformID', $value);
+        return $this->setParameter('PlatformID', $value);
     }
 
     public function getPlatformID()
     {
-        return $this->getParameter('platformID');
+        return $this->getParameter('PlatformID');
     }
 
     public function setInvoiceMark($value)
     {
-        return $this->setParameter('invoiceMark', $value);
+        return $this->setParameter('InvoiceMark', $value);
     }
 
     public function getInvoiceMark()
     {
-        return $this->getParameter('invoiceMark');
+        return $this->getParameter('InvoiceMark');
+    }
+
+    public function setHoldTradeAMT($value)
+    {
+        return $this->setParameter('HoldTradeAMT', $value);
+    }
+
+    public function getHoldTradeAMT()
+    {
+        return $this->getParameter('HoldTradeAMT');
+    }
+
+    public function setAllPayID($value)
+    {
+        return $this->setParameter('AllPayID', $value);
+    }
+
+    public function getAllPayID()
+    {
+        return $this->getParameter('AllPayID');
+    }
+
+    public function setAccountID($value)
+    {
+        return $this->setParameter('AccountID', $value);
+    }
+
+    public function getAccountID()
+    {
+        return $this->getParameter('AccountID');
+    }
+
+    public function setEncryptType($value)
+    {
+        return $this->setParameter('EncryptType', $value);
+    }
+
+    public function getEncryptType()
+    {
+        return $this->getParameter('EncryptType');
     }
 
     public function setExpireDate($value)
     {
-        return $this->setParameter('expireDate', $value);
+        return $this->setParameter('ExpireDate', $value);
     }
 
     public function getExpireDate()
     {
-        return $this->getParameter('expireDate');
+        return $this->getParameter('ExpireDate');
+    }
+
+    public function setPaymentInfoURL($value)
+    {
+        return $this->setParameter('PaymentInfoURL', $value);
+    }
+
+    public function getPaymentInfoURL()
+    {
+        return $this->getParameter('PaymentInfoURL');
+    }
+
+    public function setClientRedirectURL($value)
+    {
+        return $this->setParameter('ClientRedirectURL', $value);
+    }
+
+    public function getClientRedirectURL()
+    {
+        return $this->getParameter('ClientRedirectURL');
+    }
+
+    public function setStoreExpireDate($value)
+    {
+        return $this->setParameter('StoreExpireDate', $value);
+    }
+
+    public function getStoreExpireDate()
+    {
+        return $this->getParameter('StoreExpireDate');
     }
 
     public function setDesc1($value)
     {
-        return $this->setParameter('desc1', $value);
+        return $this->setParameter('Desc_1', $value);
     }
 
     public function getDesc1()
     {
-        return $this->getParameter('desc1');
+        return $this->getParameter('Desc_1');
     }
 
     public function setDesc2($value)
     {
-        return $this->setParameter('desc2', $value);
+        return $this->setParameter('Desc_2', $value);
     }
 
     public function getDesc2()
     {
-        return $this->getParameter('desc2');
+        return $this->getParameter('Desc_2');
     }
 
     public function setDesc3($value)
     {
-        return $this->setParameter('desc3', $value);
+        return $this->setParameter('Desc_3', $value);
     }
 
     public function getDesc3()
     {
-        return $this->getParameter('desc3');
+        return $this->getParameter('Desc_3');
     }
 
     public function setDesc4($value)
     {
-        return $this->setParameter('desc4', $value);
+        return $this->setParameter('Desc_4', $value);
     }
 
     public function getDesc4()
     {
-        return $this->getParameter('desc4');
+        return $this->getParameter('Desc_4');
     }
 
-    public function setClientRedirectUrl($value)
+    public function setAlipayItemName($value)
     {
-        return $this->setParameter('clientRedirectUrl', $value);
+        return $this->setParameter('AlipayItemName', $value);
     }
 
-    public function getClientRedirectUrl()
+    public function getAlipayItemName()
     {
-        return $this->getParameter('clientRedirectUrl');
+        return $this->getParameter('AlipayItemName');
+    }
+
+    public function setAlipayItemCounts($value)
+    {
+        return $this->setParameter('AlipayItemCounts', $value);
+    }
+
+    public function getAlipayItemCounts()
+    {
+        return $this->getParameter('AlipayItemCounts');
+    }
+
+    public function setAlipayItemPrice($value)
+    {
+        return $this->setParameter('AlipayItemPrice', $value);
+    }
+
+    public function getAlipayItemPrice()
+    {
+        return $this->getParameter('AlipayItemPrice');
     }
 
     public function setEmail($value)
     {
-        return $this->setParameter('email', $value);
+        return $this->setParameter('Email', $value);
     }
 
     public function getEmail()
     {
-        return $this->getParameter('email');
+        return $this->getParameter('Email');
     }
 
     public function setPhoneNo($value)
     {
-        return $this->setParameter('phoneNo', $value);
+        return $this->setParameter('PhoneNo', $value);
     }
 
     public function getPhoneNo()
     {
-        return $this->getParameter('phoneNo');
+        return $this->getParameter('PhoneNo');
     }
 
     public function setUserName($value)
     {
-        return $this->setParameter('userName', $value);
+        return $this->setParameter('UserName', $value);
     }
 
     public function getUserName()
     {
-        return $this->getParameter('userName');
+        return $this->getParameter('UserName');
     }
 
     public function setExpireTime($value)
     {
-        return $this->setParameter('expireTime', $value);
+        return $this->setParameter('ExpireTime', $value);
     }
 
     public function getExpireTime()
     {
-        return $this->getParameter('expireTime');
+        return $this->getParameter('ExpireTime');
     }
 
     public function setCreditInstallment($value)
     {
-        return $this->setParameter('creditInstallment', $value);
+        return $this->setParameter('CreditInstallment', $value);
     }
 
     public function getCreditInstallment()
     {
-        return $this->getParameter('creditInstallment');
+        return $this->getParameter('CreditInstallment');
     }
 
     public function setInstallmentAmount($value)
     {
-        return $this->setParameter('installmentAmount', $value);
+        return $this->setParameter('InstallmentAmount', $value);
     }
 
     public function getInstallmentAmount()
     {
-        return $this->getParameter('installmentAmount');
+        return $this->getParameter('InstallmentAmount');
     }
 
     public function setRedeem($value)
     {
-        return $this->setParameter('redeem', $value);
+        return $this->setParameter('Redeem', $value);
     }
 
     public function getRedeem()
     {
-        return $this->getParameter('redeem');
+        return $this->getParameter('Redeem');
     }
 
     public function setUnionPay($value)
     {
-        return $this->setParameter('unionPay', $value);
+        return $this->setParameter('UnionPay', $value);
     }
 
     public function getUnionPay()
     {
-        return $this->getParameter('unionPay');
+        return $this->getParameter('UnionPay');
+    }
+
+    public function setLanguage($value)
+    {
+        return $this->setParameter('Language', $value);
+    }
+
+    public function getLanguage()
+    {
+        return $this->getParameter('Language');
     }
 
     public function setPeriodAmount($value)
     {
-        return $this->setParameter('periodAmount', $value);
+        return $this->setParameter('PeriodAmount', $value);
     }
 
     public function getPeriodAmount()
     {
-        return $this->getParameter('periodAmount');
+        return $this->getParameter('PeriodAmount');
     }
 
     public function setPeriodType($value)
     {
-        return $this->setParameter('periodType', $value);
+        return $this->setParameter('PeriodType', $value);
     }
 
     public function getPeriodType()
     {
-        return $this->getParameter('periodType');
+        return $this->getParameter('PeriodType');
     }
 
     public function setFrequency($value)
     {
-        return $this->setParameter('frequency', $value);
+        return $this->setParameter('Frequency', $value);
     }
 
     public function getFrequency()
     {
-        return $this->getParameter('frequency');
+        return $this->getParameter('Frequency');
     }
 
     public function setExecTimes($value)
     {
-        return $this->setParameter('execTimes', $value);
+        return $this->setParameter('ExecTimes', $value);
     }
 
     public function getExecTimes()
     {
-        return $this->getParameter('execTimes');
+        return $this->getParameter('ExecTimes');
     }
 
-    public function setPaymentInfoUrl($value)
+    public function setPeriodReturnURL($value)
     {
-        return $this->setParameter('paymentInfoUrl', $value);
+        return $this->setParameter('PeriodReturnURL', $value);
     }
 
-    public function getPaymentInfoUrl()
+    public function getPeriodReturnURL()
     {
-        return $this->getParameter('paymentInfoUrl');
+        return $this->getParameter('PeriodReturnURL');
     }
 
-    public function setPeriodReturnUrl($value)
+    public function setRelateNumber($value)
     {
-        return $this->setParameter('periodReturnUrl', $value);
+        return $this->setParameter('RelateNumber', $value);
     }
 
-    public function getPeriodReturnUrl()
+    public function getRelateNumber()
     {
-        return $this->getParameter('periodReturnUrl');
+        return $this->getParameter('RelateNumber');
+    }
+
+    public function setCustomerID($value)
+    {
+        return $this->setParameter('CustomerID', $value);
+    }
+
+    public function getCustomerID()
+    {
+        return $this->getParameter('CustomerID');
     }
 
     public function setCustomerIdentifier($value)
     {
-        return $this->setParameter('customerIdentifier', $value);
+        return $this->setParameter('CustomerIdentifier', $value);
     }
 
     public function getCustomerIdentifier()
     {
-        return $this->getParameter('customerIdentifier');
-    }
-
-    public function setCarruerType($value)
-    {
-        return $this->setParameter('carruerType', $value);
-    }
-
-    public function getCarruerType()
-    {
-        return $this->getParameter('carruerType');
-    }
-
-    public function setCustomerId($value)
-    {
-        return $this->setParameter('customerId', $value);
-    }
-
-    public function getCustomerId()
-    {
-        return $this->getParameter('customerId');
-    }
-
-    public function setDonation($value)
-    {
-        return $this->setParameter('donation', $value);
-    }
-
-    public function getDonation()
-    {
-        return $this->getParameter('donation');
-    }
-
-    public function setPrint($value)
-    {
-        return $this->setParameter('print', $value);
-    }
-
-    public function getPrint()
-    {
-        return $this->getParameter('print');
+        return $this->getParameter('CustomerIdentifier');
     }
 
     public function setCustomerName($value)
     {
-        return $this->setParameter('customerName', $value);
+        return $this->setParameter('CustomerName', $value);
     }
 
     public function getCustomerName()
     {
-        return $this->getParameter('customerName');
+        return $this->getParameter('CustomerName');
     }
 
     public function setCustomerAddr($value)
     {
-        return $this->setParameter('customerAddr', $value);
+        return $this->setParameter('CustomerAddr', $value);
     }
 
     public function getCustomerAddr()
     {
-        return $this->getParameter('customerAddr');
+        return $this->getParameter('CustomerAddr');
     }
 
     public function setCustomerPhone($value)
     {
-        return $this->setParameter('customerPhone', $value);
+        return $this->setParameter('CustomerPhone', $value);
     }
 
     public function getCustomerPhone()
     {
-        return $this->getParameter('customerPhone');
+        return $this->getParameter('CustomerPhone');
     }
 
     public function setCustomerEmail($value)
     {
-        return $this->setParameter('customerEmail', $value);
+        return $this->setParameter('CustomerEmail', $value);
     }
 
     public function getCustomerEmail()
     {
-        return $this->getParameter('customerEmail');
+        return $this->getParameter('CustomerEmail');
     }
 
     public function setClearanceMark($value)
     {
-        return $this->setParameter('clearanceMark', $value);
+        return $this->setParameter('ClearanceMark', $value);
     }
 
     public function getClearanceMark()
     {
-        return $this->getParameter('clearanceMark');
+        return $this->getParameter('ClearanceMark');
+    }
+
+    public function setTaxType($value)
+    {
+        return $this->setParameter('TaxType', $value);
+    }
+
+    public function getTaxType()
+    {
+        return $this->getParameter('TaxType');
+    }
+
+    public function setCarruerType($value)
+    {
+        return $this->setParameter('CarruerType', $value);
+    }
+
+    public function getCarruerType()
+    {
+        return $this->getParameter('CarruerType');
     }
 
     public function setCarruerNum($value)
     {
-        return $this->setParameter('carruerNum', $value);
+        return $this->setParameter('CarruerNum', $value);
     }
 
     public function getCarruerNum()
     {
-        return $this->getParameter('carruerNum');
+        return $this->getParameter('CarruerNum');
+    }
+
+    public function setDonation($value)
+    {
+        return $this->setParameter('Donation', $value);
+    }
+
+    public function getDonation()
+    {
+        return $this->getParameter('Donation');
     }
 
     public function setLoveCode($value)
     {
-        return $this->setParameter('loveCode', $value);
+        return $this->setParameter('LoveCode', $value);
     }
 
     public function getLoveCode()
     {
-        return $this->getParameter('loveCode');
+        return $this->getParameter('LoveCode');
+    }
+
+    public function setPrint($value)
+    {
+        return $this->setParameter('Print', $value);
+    }
+
+    public function getPrint()
+    {
+        return $this->getParameter('Print');
+    }
+
+    public function setInvoiceItemName($value)
+    {
+        return $this->setParameter('InvoiceItemName', $value);
+    }
+
+    public function getInvoiceItemName()
+    {
+        return $this->getParameter('InvoiceItemName');
+    }
+
+    public function setInvoiceItemCount($value)
+    {
+        return $this->setParameter('InvoiceItemCount', $value);
+    }
+
+    public function getInvoiceItemCount()
+    {
+        return $this->getParameter('InvoiceItemCount');
+    }
+
+    public function setInvoiceItemWord($value)
+    {
+        return $this->setParameter('InvoiceItemWord', $value);
+    }
+
+    public function getInvoiceItemWord()
+    {
+        return $this->getParameter('InvoiceItemWord');
+    }
+
+    public function setInvoiceItemPrice($value)
+    {
+        return $this->setParameter('InvoiceItemPrice', $value);
+    }
+
+    public function getInvoiceItemPrice()
+    {
+        return $this->getParameter('InvoiceItemPrice');
+    }
+
+    public function setInvoiceItemTaxType($value)
+    {
+        return $this->setParameter('InvoiceItemTaxType', $value);
+    }
+
+    public function getInvoiceItemTaxType()
+    {
+        return $this->getParameter('InvoiceItemTaxType');
     }
 
     public function setInvoiceRemark($value)
     {
-        return $this->setParameter('invoiceRemark', $value);
+        return $this->setParameter('InvoiceRemark', $value);
     }
 
     public function getInvoiceRemark()
     {
-        return $this->getParameter('invoiceRemark');
+        return $this->getParameter('InvoiceRemark');
     }
 
     public function setDelayDay($value)
     {
-        return $this->setParameter('delayDay', $value);
+        return $this->setParameter('DelayDay', $value);
     }
 
     public function getDelayDay()
     {
-        return $this->getParameter('delayDay');
+        return $this->getParameter('DelayDay');
+    }
+
+    public function setInvType($value)
+    {
+        return $this->setParameter('InvType', $value);
+    }
+
+    public function getInvType()
+    {
+        return $this->getParameter('InvType');
     }
 }

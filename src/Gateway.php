@@ -31,11 +31,11 @@ class Gateway extends AbstractGateway
         // 期，已過期則會回應刷卡失敗。
         return [
             'testMode' => false,
-            'hashKey' => '5294y06JbISpM5x9',
-            'hashIV' => 'v77hoKGq4kWxNNIS',
-            'merchantId' => '2000132',
+            'HashKey' => '5294y06JbISpM5x9',
+            'HashIV' => 'v77hoKGq4kWxNNIS',
+            'MerchantID' => '2000132',
             // 'currency' => 'TWD',
-            'deviceSource' => DeviceType::PC,
+            'DeviceSource' => DeviceType::PC,
         ];
     }
 
@@ -51,12 +51,14 @@ class Gateway extends AbstractGateway
 
     public function purchase(array $parameters = [])
     {
-        return $this->createRequest('\\Recca0120\\AllPay\\Message\\AuthorizeRequest', $parameters);
+        // return $this->createRequest('\\Recca0120\\AllPay\\Message\\AuthorizeRequest', $parameters);
+        return $this->authorize($parameters);
     }
 
     public function completePurchase(array $parameters = [])
     {
-        return $this->createRequest('\\Recca0120\\AllPay\\Message\\CompleteAuthorizeRequest', $parameters);
+        // return $this->createRequest('\\Recca0120\\AllPay\\Message\\CompleteAuthorizeRequest', $parameters);
+        return $this->completeAuthorize($parameters);
     }
 
     public function void(array $parameters = [])
@@ -66,41 +68,41 @@ class Gateway extends AbstractGateway
 
     public function setDeviceSource($value)
     {
-        return $this->setParameter('deviceSource', $value);
+        return $this->setParameter('DeviceSource', $value);
     }
 
     public function getDeviceSource()
     {
-        return $this->getParameter('deviceSource');
+        return $this->getParameter('DeviceSource');
     }
 
     public function setHashKey($value)
     {
-        return $this->setParameter('hashKey', $value);
+        return $this->setParameter('HashKey', $value);
     }
 
     public function getHashKey()
     {
-        return $this->getParameter('hashKey');
+        return $this->getParameter('HashKey');
     }
 
     public function setHashIV($value)
     {
-        return $this->setParameter('hashIV', $value);
+        return $this->setParameter('HashIV', $value);
     }
 
     public function getHashIV()
     {
-        return $this->getParameter('hashIV');
+        return $this->getParameter('HashIV');
     }
 
     public function setMerchantId($value)
     {
-        return $this->setParameter('merchantId', $value);
+        return $this->setParameter('MerchantId', $value);
     }
 
     public function getMerchantId()
     {
-        return $this->getParameter('merchantId');
+        return $this->getParameter('MerchantId');
     }
 }
