@@ -96,13 +96,13 @@ class Gateway extends AbstractGateway
         return $this->getParameter('HashIV');
     }
 
-    public function setMerchantId($value)
+    public function setMerchantID($value)
     {
-        return $this->setParameter('MerchantId', $value);
+        return $this->setParameter('MerchantID', $value);
     }
 
-    public function getMerchantId()
+    public function getMerchantID()
     {
-        return $this->getParameter('MerchantId');
+        return $this->getParameter('MerchantID');
     }
 }

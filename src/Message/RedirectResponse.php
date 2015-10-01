@@ -4,7 +4,7 @@ namespace Recca0120\AllPay\Message;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
 
-class AuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
+class RedirectResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public function isSuccessful()
     {

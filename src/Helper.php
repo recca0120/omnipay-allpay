@@ -48,6 +48,14 @@ class Helper extends baseHelper
     public static function aliases($parameters, $skipParameters = [])
     {
         $data = [];
+
+        $aliases = [
+            'amount' => 'TotalAmount',
+            'description' => 'TradeDesc',
+            'transactionId' => 'TradeNo',
+            'transactionReference' => 'MerchantTradeNo',
+        ];
+
         $skipParameters = array_merge([
             'HashKey',
             'HashIV',
@@ -65,6 +73,7 @@ class Helper extends baseHelper
                 // case 'currency':
                 //     $data[ucfirst($key)] = static::currencyAlias($value);
                 //     break;
+                case 'items':
                 case 'Items':
                     $items = [];
                     foreach ($value as $item) {
@@ -79,7 +88,11 @@ class Helper extends baseHelper
                     $data['Items'] = $items;
                     break;
                 default:
-                    $data[$key] = $value;
+                    if (isset($aliases[$key])) {
+                        $data[$aliases[$key]] = $value;
+                    } else {
+                        $data[$key] = $value;
+                    }
                     break;
             }
         }
@@ -91,6 +104,9 @@ class Helper extends baseHelper
     public static function generateSignature($hashKey, $hashIV, $parameters, $skipParameters = [])
     {
         $skipParameters = array_merge([
+            'testMode',
+            'HashKey',
+            'HashIV',
             'CheckMacValue',
         ], $skipParameters);
 

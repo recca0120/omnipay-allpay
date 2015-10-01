@@ -18,9 +18,14 @@ abstract class AbstractResponse extends baseAbstractResponse
         return $this->successful;
     }
 
-    public function getTransactionReference()
+    public function getTransactionId()
     {
         return isset($this->data['TradeNo']) ? $this->data['TradeNo'] : null;
+    }
+
+    public function getTransactionReference()
+    {
+        return isset($this->data['MerchantTradeNo']) ? $this->data['MerchantTradeNo'] : null;
     }
 
     public function getMessage()

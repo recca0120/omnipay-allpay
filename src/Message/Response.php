@@ -2,6 +2,6 @@
 
 namespace Recca0120\AllPay\Message;
 
-class VoidResponse extends AbstractResponse
+class Response extends AbstractResponse
 {
 }
