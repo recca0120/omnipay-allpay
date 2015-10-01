@@ -2,7 +2,7 @@
 
 namespace Recca0120\AllPay\Message\Traits;
 
-trait ExtraPaidInfoWebATM
+trait ExtraPaidInfoATM
 {
     public function setATMAccBank($value)
     {

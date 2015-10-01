@@ -61,9 +61,9 @@ class Gateway extends AbstractGateway
         return $this->completeAuthorize($parameters);
     }
 
-    public function void(array $parameters = [])
+    public function refund(array $parameters = [])
     {
-        return $this->createRequest('\\Recca0120\\AllPay\\Message\\VoidRequest', $parameters);
+        return $this->createRequest('\\Recca0120\\AllPay\\Message\\RefundRequest', $parameters);
     }
 
     public function setDeviceSource($value)

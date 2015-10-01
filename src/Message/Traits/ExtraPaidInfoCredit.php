@@ -27,7 +27,7 @@ trait ExtraPaidInfoCredit
 
     public function setGwsr($value)
     {
-        return $this->setParameter('gwsr');
+        return $this->setParameter('gwsr', $value);
     }
 
     public function getGwsr()
@@ -37,7 +37,7 @@ trait ExtraPaidInfoCredit
 
     public function setProcessDate($value)
     {
-        return $this->setParameter('process_date');
+        return $this->setParameter('process_date', $value);
     }
 
     public function getProcessDate()
@@ -47,7 +47,7 @@ trait ExtraPaidInfoCredit
 
     public function setAuthCode($value)
     {
-        return $this->setParameter('auth_code');
+        return $this->setParameter('auth_code', $value);
     }
 
     public function getAuthCode()
@@ -57,7 +57,7 @@ trait ExtraPaidInfoCredit
 
     public function setAmount($value)
     {
-        return $this->setParameter('amount');
+        return $this->setParameter('amount', $value);
     }
 
     public function getAmount()
@@ -67,7 +67,7 @@ trait ExtraPaidInfoCredit
 
     public function setStage($value)
     {
-        return $this->setParameter('stage');
+        return $this->setParameter('stage', $value);
     }
 
     public function getStage()
@@ -77,7 +77,7 @@ trait ExtraPaidInfoCredit
 
     public function setStast($value)
     {
-        return $this->setParameter('stast');
+        return $this->setParameter('stast', $value);
     }
 
     public function getStast()
@@ -87,7 +87,7 @@ trait ExtraPaidInfoCredit
 
     public function setStaed($value)
     {
-        return $this->setParameter('staed');
+        return $this->setParameter('staed', $value);
     }
 
     public function getStaed()
@@ -96,7 +96,7 @@ trait ExtraPaidInfoCredit
     }
     public function setEci($value)
     {
-        return $this->setParameter('eci');
+        return $this->setParameter('eci', $value);
     }
 
     public function getEci()
@@ -106,7 +106,7 @@ trait ExtraPaidInfoCredit
 
     public function setCard4no($value)
     {
-        return $this->setParameter('card4no');
+        return $this->setParameter('card4no', $value);
     }
 
     public function getCard4no()
@@ -116,7 +116,7 @@ trait ExtraPaidInfoCredit
 
     public function setCard6no($value)
     {
-        return $this->setParameter('card6no');
+        return $this->setParameter('card6no', $value);
     }
 
     public function getCard6no()
@@ -126,7 +126,7 @@ trait ExtraPaidInfoCredit
 
     public function setRedDan($value)
     {
-        return $this->setParameter('red_dan');
+        return $this->setParameter('red_dan', $value);
     }
 
     public function getRedDan()
@@ -136,7 +136,7 @@ trait ExtraPaidInfoCredit
 
     public function setRedDeAmt($value)
     {
-        return $this->setParameter('red_de_amt');
+        return $this->setParameter('red_de_amt', $value);
     }
 
     public function getRedDeAmt()
@@ -146,7 +146,7 @@ trait ExtraPaidInfoCredit
 
     public function setRedOkAmt($value)
     {
-        return $this->setParameter('red_ok_amt');
+        return $this->setParameter('red_ok_amt', $value);
     }
 
     public function getRedOkAmt()
@@ -156,7 +156,7 @@ trait ExtraPaidInfoCredit
 
     public function setRedYet($value)
     {
-        return $this->setParameter('red_yet');
+        return $this->setParameter('red_yet', $value);
     }
 
     public function getRedYet()
@@ -166,7 +166,7 @@ trait ExtraPaidInfoCredit
 
     public function setPeriodType($value)
     {
-        return $this->setParameter('PeriodType');
+        return $this->setParameter('PeriodType', $value);
     }
 
     public function getPeriodType()
@@ -176,7 +176,7 @@ trait ExtraPaidInfoCredit
 
     public function setFrequency($value)
     {
-        return $this->setParameter('Frequency');
+        return $this->setParameter('Frequency', $value);
     }
 
     public function getFrequency()
@@ -186,7 +186,7 @@ trait ExtraPaidInfoCredit
 
     public function setExecTimes($value)
     {
-        return $this->setParameter('ExecTimes');
+        return $this->setParameter('ExecTimes', $value);
     }
 
     public function getExecTimes()
@@ -196,7 +196,7 @@ trait ExtraPaidInfoCredit
 
     public function setPeriodAmount($value)
     {
-        return $this->setParameter('PeriodAmount');
+        return $this->setParameter('PeriodAmount', $value);
     }
 
     public function getPeriodAmount()
@@ -206,7 +206,7 @@ trait ExtraPaidInfoCredit
 
     public function setTotalSuccessTimes($value)
     {
-        return $this->setParameter('TotalSuccessTimes');
+        return $this->setParameter('TotalSuccessTimes', $value);
     }
 
     public function getTotalSuccessTimes()
@@ -216,7 +216,7 @@ trait ExtraPaidInfoCredit
 
     public function setTotalSuccessAmount($value)
     {
-        return $this->setParameter('TotalSuccessAmount');
+        return $this->setParameter('TotalSuccessAmount', $value);
     }
 
     public function getTotalSuccessAmount()

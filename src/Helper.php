@@ -45,17 +45,8 @@ class Helper extends baseHelper
         return $currencyCode;
     }
 
-    public static function aliases($parameters, $skipParameters = [])
+    public static function skipParameters($parameters, $skipParameters = [])
     {
-        $data = [];
-
-        $aliases = [
-            'amount' => 'TotalAmount',
-            'description' => 'TradeDesc',
-            'transactionId' => 'TradeNo',
-            'transactionReference' => 'MerchantTradeNo',
-        ];
-
         $skipParameters = array_merge([
             'HashKey',
             'HashIV',
@@ -67,6 +58,20 @@ class Helper extends baseHelper
                 unset($parameters[$value]);
             }
         }
+
+        return $parameters;
+    }
+
+    public static function aliases($parameters)
+    {
+        $data = [];
+
+        $aliases = [
+            'amount' => 'TotalAmount',
+            'description' => 'TradeDesc',
+            'transactionId' => 'TradeNo',
+            'transactionReference' => 'MerchantTradeNo',
+        ];
 
         foreach ($parameters as $key => $value) {
             switch ($key) {

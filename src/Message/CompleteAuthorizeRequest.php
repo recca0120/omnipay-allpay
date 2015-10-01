@@ -5,6 +5,12 @@ namespace Recca0120\AllPay\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Recca0120\AllPay\Constants\PaymentMethod;
 use Recca0120\AllPay\Helper;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoAlipay;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoATM;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoBarcode;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoCredit;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoTenpay;
+use Recca0120\AllPay\Message\Traits\ExtraPaidInfoWebATM;
 use Recca0120\AllPay\Message\Traits\PaymentInfoATM;
 use Recca0120\AllPay\Message\Traits\PaymentInfoBarcode;
 use Recca0120\AllPay\Message\Traits\PaymentReturnURL;
@@ -13,9 +19,17 @@ class CompleteAuthorizeRequest extends AbstractRequest
 {
     use PaymentReturnURL,
     PaymentInfoATM,
-    PaymentInfoBarcode {
+    PaymentInfoBarcode,
+    ExtraPaidInfoATM,
+    ExtraPaidInfoWebATM,
+    ExtraPaidInfoAlipay,
+    ExtraPaidInfoCredit,
+    ExtraPaidInfoTenpay,
+    ExtraPaidInfoBarcode {
         PaymentInfoATM::setExpireDate insteadof PaymentInfoBarcode;
         PaymentInfoATM::getExpireDate insteadof PaymentInfoBarcode;
+        ExtraPaidInfoBarcode::setPaymentNo insteadof PaymentInfoBarcode;
+        ExtraPaidInfoBarcode::getPaymentNo insteadof PaymentInfoBarcode;
     }
 
     public $testEndPoint = [
@@ -36,7 +50,7 @@ class CompleteAuthorizeRequest extends AbstractRequest
 
     public function getData()
     {
-        $data = Helper::aliases($this->getParameters());
+        $data = Helper::skipParameters($this->getParameters());
 
         if (isset($data['RtnCode']) === false) {
             $arErrors = [];
@@ -83,12 +97,5 @@ class CompleteAuthorizeRequest extends AbstractRequest
         }
 
         return $data;
-    }
-
-    public function sendData($data)
-    {
-        $this->response = new Response($this, $data);
-
-        return $this->response;
     }
 }

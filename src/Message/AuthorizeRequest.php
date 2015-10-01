@@ -121,7 +121,7 @@ class AuthorizeRequest extends AbstractRequest
             'LoveCode' => '',
             'InvoiceRemark' => '',
             'DelayDay' => 0,
-        ], $this->getParameters()));
+        ], Helper::skipParameters($this->getParameters())));
 
         // 變數宣告。
         $arErrors = [];

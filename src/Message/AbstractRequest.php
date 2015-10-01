@@ -37,6 +37,13 @@ abstract class AbstractRequest extends baseAbstractRequest
         return $this->setParameter('items', $items);
     }
 
+    public function sendData($data)
+    {
+        $this->response = new Response($this, $data);
+
+        return $this->response;
+    }
+
     public function generateSignature($data, $skipParameters = [])
     {
         $hashKey = $this->getHashKey();
