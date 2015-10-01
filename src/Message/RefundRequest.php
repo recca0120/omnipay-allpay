@@ -26,7 +26,6 @@ class RefundRequest extends AbstractRequest
             $data['RtnCode'] = $response[0];
             $data['RtnMsg'] = $response[1];
         }
-        $data['CheckMacValue'] = $this->generateSignature($data);
 
         return $data;
     }

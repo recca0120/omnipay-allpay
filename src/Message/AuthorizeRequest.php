@@ -736,11 +736,4 @@ class AuthorizeRequest extends AbstractRequest
 
         return $arParameters;
     }
-
-    public function sendData($data)
-    {
-        $this->response = new RedirectResponse($this, $data);
-
-        return $this->response;
-    }
 }
