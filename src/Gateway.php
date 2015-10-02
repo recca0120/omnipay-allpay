@@ -34,7 +34,7 @@ class Gateway extends AbstractGateway
             'HashKey' => '5294y06JbISpM5x9',
             'HashIV' => 'v77hoKGq4kWxNNIS',
             'MerchantID' => '2000132',
-            // 'currency' => 'TWD',
+            'currency' => 'TWD',
             'DeviceSource' => DeviceType::PC,
         ];
     }
