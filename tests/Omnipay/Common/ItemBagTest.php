@@ -8,18 +8,18 @@ class ItemBagTest extends TestCase
 {
     public function setUp()
     {
-        $this->bag = new ItemBag;
+        $this->bag = new ItemBag();
     }
 
     public function testConstruct()
     {
-        $bag = new ItemBag(array(array('name' => 'Floppy Disk')));
+        $bag = new ItemBag([['name' => 'Floppy Disk']]);
         $this->assertCount(1, $bag);
     }
 
     public function testAll()
     {
-        $items = array(new Item, new Item);
+        $items = [new Item(), new Item()];
         $bag = new ItemBag($items);
 
         $this->assertSame($items, $bag->all());
@@ -27,7 +27,7 @@ class ItemBagTest extends TestCase
 
     public function testReplace()
     {
-        $items = array(new Item, new Item);
+        $items = [new Item(), new Item()];
         $this->bag->replace($items);
 
         $this->assertSame($items, $this->bag->all());
@@ -35,7 +35,7 @@ class ItemBagTest extends TestCase
 
     public function testAddWithItem()
     {
-        $item = new Item;
+        $item = new Item();
         $item->setName('CD-ROM');
         $this->bag->add($item);
 
@@ -45,7 +45,7 @@ class ItemBagTest extends TestCase
 
     public function testAddWithArray()
     {
-        $item = array('name' => 'CD-ROM');
+        $item = ['name' => 'CD-ROM'];
         $this->bag->add($item);
 
         $contents = $this->bag->all();
@@ -55,7 +55,7 @@ class ItemBagTest extends TestCase
 
     public function testGetIterator()
     {
-        $item = new Item;
+        $item = new Item();
         $item->setName('CD-ROM');
         $this->bag->add($item);
 
@@ -66,9 +66,9 @@ class ItemBagTest extends TestCase
 
     public function testCount()
     {
-        $this->bag->add(new Item);
-        $this->bag->add(new Item);
-        $this->bag->add(new Item);
+        $this->bag->add(new Item());
+        $this->bag->add(new Item());
+        $this->bag->add(new Item());
 
         $this->assertSame(3, count($this->bag));
     }

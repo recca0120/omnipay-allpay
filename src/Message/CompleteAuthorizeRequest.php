@@ -33,11 +33,11 @@ class CompleteAuthorizeRequest extends AbstractRequest
     }
 
     public $testEndPoint = [
-        PaymentMethod::ALL => 'http://payment-stage.allpay.com.tw/Cashier/QueryTradeInfo',
+        PaymentMethod::ALL    => 'http://payment-stage.allpay.com.tw/Cashier/QueryTradeInfo',
         PaymentMethod::CREDIT => 'https://payment-stage.allpay.com.tw/Cashier/QueryCreditCardPeriodInfo',
     ];
     public $liveEndPoint = [
-        PaymentMethod::ALL => 'https://payment.allpay.com.tw/Cashier/QueryTradeInfo',
+        PaymentMethod::ALL    => 'https://payment.allpay.com.tw/Cashier/QueryTradeInfo',
         PaymentMethod::CREDIT => 'https://payment.allpay.com.tw/Cashier/QueryCreditCardPeriodInfo',
     ];
 
@@ -78,7 +78,7 @@ class CompleteAuthorizeRequest extends AbstractRequest
             if (strlen($data['TimeStamp']) == 0) {
                 array_push($arErrors, 'TimeStamp is required.');
             }
-            if (sizeof($arErrors) == 0) {
+            if (count($arErrors) == 0) {
                 $data['CheckMacValue'] = $this->generateSignature($data);
                 $response = $this->httpClient->post($this->getEndPoint(), null, $data)->send();
                 $response = (string) $response->getBody();

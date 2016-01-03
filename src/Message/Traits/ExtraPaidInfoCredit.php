@@ -94,6 +94,7 @@ trait ExtraPaidInfoCredit
     {
         return $this->getParameter('staed');
     }
+
     public function setEci($value)
     {
         return $this->setParameter('eci', $value);

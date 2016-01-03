@@ -30,11 +30,11 @@ class Gateway extends AbstractGateway
         // 信用卡有效年月請設定 2013 年 11 月以後，因為系統會判斷有效年月是否已過
         // 期，已過期則會回應刷卡失敗。
         return [
-            'testMode' => false,
-            'HashKey' => '5294y06JbISpM5x9',
-            'HashIV' => 'v77hoKGq4kWxNNIS',
-            'MerchantID' => '2000132',
-            'currency' => 'TWD',
+            'testMode'     => false,
+            'HashKey'      => '5294y06JbISpM5x9',
+            'HashIV'       => 'v77hoKGq4kWxNNIS',
+            'MerchantID'   => '2000132',
+            'currency'     => 'TWD',
             'DeviceSource' => DeviceType::PC,
         ];
     }

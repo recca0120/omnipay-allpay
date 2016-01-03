@@ -10,7 +10,7 @@ class Item extends baseItem
     {
         $parameters = array_merge([
             'currency' => 'TWD',
-            'url' => null,
+            'url'      => null,
         ], $parameters);
         $this->initialize($parameters);
     }

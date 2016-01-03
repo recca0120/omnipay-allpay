@@ -8,36 +8,36 @@ class CreditCardTest extends TestCase
 {
     public function setUp()
     {
-        $this->card = new CreditCard;
+        $this->card = new CreditCard();
         $this->card->setNumber('4111111111111111');
         $this->card->setFirstName('Example');
         $this->card->setLastName('Customer');
         $this->card->setExpiryMonth('4');
-        $this->card->setExpiryYear(gmdate('Y')+2);
+        $this->card->setExpiryYear(gmdate('Y') + 2);
         $this->card->setCvv('123');
     }
 
     public function testConstructWithParams()
     {
-        $card = new CreditCard(array('name' => 'Test Customer'));
+        $card = new CreditCard(['name' => 'Test Customer']);
         $this->assertSame('Test Customer', $card->getName());
     }
 
     public function testInitializeWithParams()
     {
-        $card = new CreditCard;
-        $card->initialize(array('name' => 'Test Customer'));
+        $card = new CreditCard();
+        $card->initialize(['name' => 'Test Customer']);
         $this->assertSame('Test Customer', $card->getName());
     }
 
     public function testGetParamters()
     {
-        $card = new CreditCard(array(
-            'name' => 'Example Customer',
-            'number' => '1234',
+        $card = new CreditCard([
+            'name'        => 'Example Customer',
+            'number'      => '1234',
             'expiryMonth' => 6,
-            'expiryYear' => 2016,
-        ));
+            'expiryYear'  => 2016,
+        ]);
 
         $parameters = $card->getParameters();
         $this->assertSame('Example', $parameters['billingFirstName']);
@@ -88,7 +88,7 @@ class CreditCardTest extends TestCase
      */
     public function testValidateExpiryDate()
     {
-        $this->card->setExpiryYear(gmdate('Y')-1);
+        $this->card->setExpiryYear(gmdate('Y') - 1);
         $this->card->validate();
     }
 
@@ -201,43 +201,43 @@ class CreditCardTest extends TestCase
 
     public function testGetBrandDefault()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
         $this->assertNull($card->getBrand());
     }
 
     public function testGetBrandVisa()
     {
-        $card = new CreditCard(array('number' => '4242424242424242'));
+        $card = new CreditCard(['number' => '4242424242424242']);
         $this->assertSame(CreditCard::BRAND_VISA, $card->getBrand());
     }
 
     public function testGetBrandMasterCard()
     {
-        $card = new CreditCard(array('number' => '5555555555554444'));
+        $card = new CreditCard(['number' => '5555555555554444']);
         $this->assertSame(CreditCard::BRAND_MASTERCARD, $card->getBrand());
     }
 
     public function testGetBrandAmex()
     {
-        $card = new CreditCard(array('number' => '378282246310005'));
+        $card = new CreditCard(['number' => '378282246310005']);
         $this->assertSame(CreditCard::BRAND_AMEX, $card->getBrand());
     }
 
     public function testGetBrandDiscover()
     {
-        $card = new CreditCard(array('number' => '6011111111111117'));
+        $card = new CreditCard(['number' => '6011111111111117']);
         $this->assertSame(CreditCard::BRAND_DISCOVER, $card->getBrand());
     }
 
     public function testGetBrandDinersClub()
     {
-        $card = new CreditCard(array('number' => '30569309025904'));
+        $card = new CreditCard(['number' => '30569309025904']);
         $this->assertSame(CreditCard::BRAND_DINERS_CLUB, $card->getBrand());
     }
 
     public function testGetBrandJcb()
     {
-        $card = new CreditCard(array('number' => '3530111333300000'));
+        $card = new CreditCard(['number' => '3530111333300000']);
         $this->assertSame(CreditCard::BRAND_JCB, $card->getBrand());
     }
 

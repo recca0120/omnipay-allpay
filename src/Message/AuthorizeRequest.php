@@ -42,12 +42,12 @@ class AuthorizeRequest extends AbstractRequest
     }
 
     public $testEndPoint = [
-        DeviceType::PC => 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut',
+        DeviceType::PC     => 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut',
         DeviceType::MOBILE => 'http://payment-stage.allpay.com.tw/Mobile/CreateServerOrder',
     ];
 
     public $liveEndPoint = [
-        DeviceType::PC => 'https://payment.allpay.com.tw/Cashier/AioCheckOut',
+        DeviceType::PC     => 'https://payment.allpay.com.tw/Cashier/AioCheckOut',
         DeviceType::MOBILE => 'https://payment.allpay.com.tw/Mobile/CreateServerOrder',
     ];
 
@@ -61,22 +61,22 @@ class AuthorizeRequest extends AbstractRequest
     public function getData()
     {
         $data = Helper::aliases(array_merge([
-            'ReturnURL' => '',
-            'ClientBackURL' => '',
-            'OrderResultURL' => '',
-            'MerchantTradeNo' => '',
+            'ReturnURL'         => '',
+            'ClientBackURL'     => '',
+            'OrderResultURL'    => '',
+            'MerchantTradeNo'   => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
-            'PaymentType' => 'aio',
-            'TotalAmount' => '',
-            'TradeDesc' => '',
-            'ChoosePayment' => PaymentMethod::ALL,
-            'Remark' => '',
-            'ChooseSubPayment' => PaymentMethodItem::NONE,
+            'PaymentType'       => 'aio',
+            'TotalAmount'       => '',
+            'TradeDesc'         => '',
+            'ChoosePayment'     => PaymentMethod::ALL,
+            'Remark'            => '',
+            'ChooseSubPayment'  => PaymentMethodItem::NONE,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::NO,
-            'DeviceSource' => DeviceType::PC,
-            'IgnorePayment' => '',
-            'PlatformID' => '',
-            'InvoiceMark' => InvoiceState::NO,
+            'DeviceSource'      => DeviceType::PC,
+            'IgnorePayment'     => '',
+            'PlatformID'        => '',
+            'InvoiceMark'       => InvoiceState::NO,
 
             // ATM 延伸參數。
             'ExpireDate' => 3,
@@ -88,39 +88,39 @@ class AuthorizeRequest extends AbstractRequest
             // ATM, CVS, BARCODE 延伸參數。
             'ClientRedirectURL' => '',
             // Alipay 延伸參數。
-            'Email' => '',
-            'PhoneNo' => '',
+            'Email'    => '',
+            'PhoneNo'  => '',
             'UserName' => '',
             // Tenpay 延伸參數。
             'ExpireTime' => '',
             // Credit 分期延伸參數。
             'CreditInstallment' => 0,
             'InstallmentAmount' => 0,
-            'Redeem' => false,
-            'UnionPay' => false,
+            'Redeem'            => false,
+            'UnionPay'          => false,
             // Credit 定期定額延伸參數。
             'PeriodAmount' => '',
-            'PeriodType' => '',
-            'Frequency' => '',
-            'ExecTimes' => '',
+            'PeriodType'   => '',
+            'Frequency'    => '',
+            'ExecTimes'    => '',
             // 回傳網址的延伸參數。
-            'PaymentInfoURL' => '',
+            'PaymentInfoURL'  => '',
             'PeriodReturnURL' => '',
             // 電子發票延伸參數。
             'CustomerIdentifier' => '',
-            'CarruerType' => CarruerType::NONE,
-            'CustomerID' => '',
-            'Donation' => Donation::NO,
-            'Print' => PrintMark::NO,
-            'CustomerName' => '',
-            'CustomerAddr' => '',
-            'CustomerPhone' => '',
-            'CustomerEmail' => '',
-            'ClearanceMark' => '',
-            'CarruerNum' => '',
-            'LoveCode' => '',
-            'InvoiceRemark' => '',
-            'DelayDay' => 0,
+            'CarruerType'        => CarruerType::NONE,
+            'CustomerID'         => '',
+            'Donation'           => Donation::NO,
+            'Print'              => PrintMark::NO,
+            'CustomerName'       => '',
+            'CustomerAddr'       => '',
+            'CustomerPhone'      => '',
+            'CustomerEmail'      => '',
+            'ClearanceMark'      => '',
+            'CarruerNum'         => '',
+            'LoveCode'           => '',
+            'InvoiceRemark'      => '',
+            'DelayDay'           => 0,
         ], Helper::skipParameters($this->getParameters())));
 
         // 變數宣告。
@@ -185,7 +185,7 @@ class AuthorizeRequest extends AbstractRequest
         if (strlen($data['DeviceSource']) == 0) {
             array_push($arErrors, 'DeviceSource is required.');
         }
-        if (sizeof($data['Items']) == 0) {
+        if (count($data['Items']) == 0) {
             array_push($arErrors, 'Items is required.');
         }
         // 檢查 Alipay 條件。
@@ -210,13 +210,13 @@ class AuthorizeRequest extends AbstractRequest
             }
         }
         // 檢查產品名稱。
-        if (sizeof($data['Items']) > 0) {
+        if (count($data['Items']) > 0) {
             foreach ($data['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $data['Items'][$keys]);
                 $szAlipayItemName .= sprintf('#%s', $data['Items'][$keys]['Name']);
                 $szAlipayItemCounts .= sprintf('#%u', $data['Items'][$keys]['Quantity']);
                 $szAlipayItemPrice .= sprintf('#%d', $data['Items'][$keys]['Price']);
-                if (! array_key_exists('ItemURL', $data)) {
+                if (!array_key_exists('ItemURL', $data)) {
                     $data['ItemURL'] = $data['Items'][$keys]['URL'];
                 }
             }
@@ -402,13 +402,13 @@ class AuthorizeRequest extends AbstractRequest
                             break;
                         // 載具類別為買受人自然人憑證(Citizen)時，請設定自然人憑證號碼，前2碼為大小寫英文，後14碼為數字
                         case CarruerType::CITIZEN:
-                            if (! preg_match('/^[a-zA-Z]{2}\d{14}$/', $data['CarruerNum'])) {
+                            if (!preg_match('/^[a-zA-Z]{2}\d{14}$/', $data['CarruerNum'])) {
                                 array_push($arErrors, 'Invalid CarruerNum.');
                             }
                             break;
                         // 載具類別為買受人手機條碼(Cellphone)時，請設定手機條碼，第1碼為「/」，後7碼為大小寫英文、數字、「+」、「-」或「.」
                         case CarruerType::CELLPHONE:
-                            if (! preg_match('/^\/{1}[0-9a-zA-Z+-.]{7}$/', $data['CarruerNum'])) {
+                            if (!preg_match('/^\/{1}[0-9a-zA-Z+-.]{7}$/', $data['CarruerNum'])) {
                                 array_push($arErrors, 'Invalid CarruerNum.');
                             }
                             break;
@@ -420,7 +420,7 @@ class AuthorizeRequest extends AbstractRequest
                 // LoveCode(預設為空字串)
                 // 捐贈註記為捐贈(Yes)時，參數長度固定3~7碼，請設定全數字或第1碼大小寫「X」，後2~6碼全數字
                 if ($data['Donation'] == Donation::YES) {
-                    if (! preg_match('/^([xX]{1}[0-9]{2,6}|[0-9]{3,7})$/', $data['LoveCode'])) {
+                    if (!preg_match('/^([xX]{1}[0-9]{2,6}|[0-9]{3,7})$/', $data['LoveCode'])) {
                         array_push($arErrors, 'Invalid LoveCode.');
                     }
                 } else {
@@ -434,7 +434,7 @@ class AuthorizeRequest extends AbstractRequest
                 // InvoiceItemWord(UrlEncode, 不可為空)
                 // InvoiceItemPrice(不可為空)
                 // InvoiceItemTaxType(不可為空)
-                if (sizeof($data['InvoiceItems']) > 0) {
+                if (count($data['InvoiceItems']) > 0) {
                     $tmpItemName = [];
                     $tmpItemCount = [];
                     $tmpItemWord = [];
@@ -498,27 +498,27 @@ class AuthorizeRequest extends AbstractRequest
         }
 
         // 輸出表單字串。
-        if (sizeof($arErrors) == 0) {
+        if (count($arErrors) == 0) {
             // 信用卡特殊邏輯判斷(行動裝置畫面的信用卡分期處理，不支援定期定額)
-            if ($data['ChoosePayment'] == PaymentMethod::CREDIT && $data['DeviceSource'] == DeviceType::MOBILE && ! $data['PeriodAmount']) {
+            if ($data['ChoosePayment'] == PaymentMethod::CREDIT && $data['DeviceSource'] == DeviceType::MOBILE && !$data['PeriodAmount']) {
                 $data['ChoosePayment'] = PaymentMethod::ALL;
                 $data['IgnorePayment'] = 'WebATM#ATM#CVS#BARCODE#Alipay#Tenpay#TopUpUsed#APPBARCODE#AccountLink';
             }
             // 產生畫面控制項與傳遞參數。
             $arParameters = [
-                'MerchantID' => $data['MerchantID'],
-                'PaymentType' => $data['PaymentType'],
-                'ItemName' => $szItemName,
-                'ItemURL' => $data['ItemURL'],
-                'InvoiceItemName' => $szInvoiceItemName,
-                'InvoiceItemCount' => $szInvoiceItemCount,
-                'InvoiceItemWord' => $szInvoiceItemWord,
-                'InvoiceItemPrice' => $szInvoiceItemPrice,
+                'MerchantID'         => $data['MerchantID'],
+                'PaymentType'        => $data['PaymentType'],
+                'ItemName'           => $szItemName,
+                'ItemURL'            => $data['ItemURL'],
+                'InvoiceItemName'    => $szInvoiceItemName,
+                'InvoiceItemCount'   => $szInvoiceItemCount,
+                'InvoiceItemWord'    => $szInvoiceItemWord,
+                'InvoiceItemPrice'   => $szInvoiceItemPrice,
                 'InvoiceItemTaxType' => $szInvoiceItemTaxType,
             ];
             $arParameters = array_merge($arParameters, $data);
             // 處理延伸參數
-            if (! $data['PlatformID']) {
+            if (!$data['PlatformID']) {
                 unset($arParameters['PlatformID']);
             }
             // 整理全功能參數。
@@ -529,35 +529,35 @@ class AuthorizeRequest extends AbstractRequest
                 unset($arParameters['PeriodReturnURL']);
                 unset($arParameters['PeriodType']);
                 $arParameters = array_merge($arParameters, [
-                   'AlipayItemName' => $szAlipayItemName,
+                   'AlipayItemName'   => $szAlipayItemName,
                    'AlipayItemCounts' => $szAlipayItemCounts,
-                   'AlipayItemPrice' => $szAlipayItemPrice,
+                   'AlipayItemPrice'  => $szAlipayItemPrice,
                 ]);
-                if (! $arParameters['CreditInstallment']) {
+                if (!$arParameters['CreditInstallment']) {
                     unset($arParameters['CreditInstallment']);
                 }
-                if (! $arParameters['InstallmentAmount']) {
+                if (!$arParameters['InstallmentAmount']) {
                     unset($arParameters['InstallmentAmount']);
                 }
-                if (! $arParameters['Redeem']) {
+                if (!$arParameters['Redeem']) {
                     unset($arParameters['Redeem']);
                 }
-                if (! $arParameters['UnionPay']) {
+                if (!$arParameters['UnionPay']) {
                     unset($arParameters['UnionPay']);
                 }
-                if (! $data['IgnorePayment']) {
+                if (!$data['IgnorePayment']) {
                     unset($arParameters['IgnorePayment']);
                 }
-                if (! $data['ClientRedirectURL']) {
+                if (!$data['ClientRedirectURL']) {
                     unset($arParameters['ClientRedirectURL']);
                 }
             }
             // 整理 Alipay 參數。
             if ($data['ChoosePayment'] == PaymentMethod::ALIPAY) {
                 $arParameters = array_merge($arParameters, [
-                   'AlipayItemName' => $szAlipayItemName,
+                   'AlipayItemName'   => $szAlipayItemName,
                    'AlipayItemCounts' => $szAlipayItemCounts,
-                   'AlipayItemPrice' => $szAlipayItemPrice,
+                   'AlipayItemPrice'  => $szAlipayItemPrice,
                 ]);
                 unset($arParameters['CreditInstallment']);
                 unset($arParameters['Desc_1']);
@@ -621,7 +621,7 @@ class AuthorizeRequest extends AbstractRequest
                 unset($arParameters['UnionPay']);
                 unset($arParameters['UserName']);
                 unset($arParameters['IgnorePayment']);
-                if (! $data['ClientRedirectURL']) {
+                if (!$data['ClientRedirectURL']) {
                     unset($arParameters['ClientRedirectURL']);
                 }
             }
@@ -642,7 +642,7 @@ class AuthorizeRequest extends AbstractRequest
                 unset($arParameters['UnionPay']);
                 unset($arParameters['UserName']);
                 unset($arParameters['IgnorePayment']);
-                if (! $data['ClientRedirectURL']) {
+                if (!$data['ClientRedirectURL']) {
                     unset($arParameters['ClientRedirectURL']);
                 }
             }
@@ -730,7 +730,7 @@ class AuthorizeRequest extends AbstractRequest
                 unset($arParameters['InvType']);
             }
         }
-        if (sizeof($arErrors) > 0) {
+        if (count($arErrors) > 0) {
             throw new InvalidRequestException(implode('- ', $arErrors));
         }
 

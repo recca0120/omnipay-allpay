@@ -2,7 +2,6 @@
 
 namespace Omnipay\Common;
 
-use Omnipay\Common\Currency;
 use Omnipay\Tests\TestCase;
 
 class CurrencyTest extends TestCase
