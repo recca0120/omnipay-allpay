@@ -18,12 +18,12 @@ class AbstractRequestTest extends TestCase
     public function testConstruct()
     {
         $this->request = new AbstractRequestTest_MockAbstractRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->assertSame(array(), $this->request->getParameters());
+        $this->assertSame([], $this->request->getParameters());
     }
 
     public function testInitializeWithParams()
     {
-        $this->assertSame($this->request, $this->request->initialize(array('amount' => '1.23')));
+        $this->assertSame($this->request, $this->request->initialize(['amount' => '1.23']));
         $this->assertSame('1.23', $this->request->getAmount());
     }
 
@@ -42,7 +42,7 @@ class AbstractRequestTest extends TestCase
     public function testCard()
     {
         // no type checking on card parameter
-        $card = new CreditCard;
+        $card = new CreditCard();
         $this->assertSame($this->request, $this->request->setCard($card));
         $this->assertSame($card, $this->request->getCard());
     }
@@ -50,7 +50,7 @@ class AbstractRequestTest extends TestCase
     public function testSetCardWithArray()
     {
         // passing array should create CreditCard object
-        $this->assertSame($this->request, $this->request->setCard(array('number' => '1234')));
+        $this->assertSame($this->request, $this->request->setCard(['number' => '1234']));
 
         $card = $this->request->getCard();
         $this->assertInstanceOf('\Omnipay\Common\CreditCard', $card);
@@ -189,10 +189,10 @@ class AbstractRequestTest extends TestCase
 
     public function testItemsArray()
     {
-        $this->assertSame($this->request, $this->request->setItems(array(
-            array('name' => 'Floppy Disk'),
-            array('name' => 'CD-ROM'),
-        )));
+        $this->assertSame($this->request, $this->request->setItems([
+            ['name' => 'Floppy Disk'],
+            ['name' => 'CD-ROM'],
+        ]));
 
         $itemBag = $this->request->getItems();
         $this->assertInstanceOf('\Omnipay\Common\ItemBag', $itemBag);
@@ -204,8 +204,8 @@ class AbstractRequestTest extends TestCase
 
     public function testItemsBag()
     {
-        $itemBag = new ItemBag;
-        $itemBag->add(array('name' => 'Floppy Disk'));
+        $itemBag = new ItemBag();
+        $itemBag->add(['name' => 'Floppy Disk']);
 
         $this->assertSame($this->request, $this->request->setItems($itemBag));
         $this->assertSame($itemBag, $this->request->getItems());
@@ -249,7 +249,7 @@ class AbstractRequestTest extends TestCase
 
     public function testInitializedParametersAreSet()
     {
-        $params = array('testMode' => 'success');
+        $params = ['testMode' => 'success'];
 
         $this->request->initialize($params);
 
@@ -261,10 +261,10 @@ class AbstractRequestTest extends TestCase
         $this->request->setTestMode(true);
         $this->request->setToken('asdf');
 
-        $expected = array(
+        $expected = [
             'testMode' => true,
-            'token' => 'asdf',
-        );
+            'token'    => 'asdf',
+        ];
         $this->assertEquals($expected, $this->request->getParameters());
     }
 
@@ -306,7 +306,7 @@ class AbstractRequestTest extends TestCase
     public function testSend()
     {
         $response = m::mock('\Omnipay\Common\Message\ResponseInterface');
-        $data = array('request data');
+        $data = ['request data'];
 
         $this->request->shouldReceive('getData')->once()->andReturn($data);
         $this->request->shouldReceive('sendData')->once()->with($data)->andReturn($response);
@@ -336,7 +336,9 @@ class AbstractRequestTest extends TestCase
 
 class AbstractRequestTest_MockAbstractRequest extends AbstractRequest
 {
-    public function getData() {}
+    public function getData()
+    {
+    }
 
     public function sendData($data)
     {

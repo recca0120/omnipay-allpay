@@ -14,9 +14,9 @@ class AbstractResponseTest extends TestCase
 
     public function testConstruct()
     {
-        $data = array('foo' => 'bar');
+        $data = ['foo' => 'bar'];
         $request = $this->getMockRequest();
-        $this->response = m::mock('\Omnipay\Common\Message\AbstractResponse', array($request, $data))->makePartial();
+        $this->response = m::mock('\Omnipay\Common\Message\AbstractResponse', [$request, $data])->makePartial();
 
         $this->assertSame($request, $this->response->getRequest());
         $this->assertSame($data, $this->response->getData());
@@ -64,7 +64,7 @@ class AbstractResponseTest extends TestCase
 
     public function testGetRedirectResponsePost()
     {
-        $data = array('foo' => 'bar', 'key&"' => '<value>');
+        $data = ['foo' => 'bar', 'key&"' => '<value>'];
         $this->response = m::mock('\Omnipay\Common\Message\AbstractResponseTest_MockRedirectResponse')->makePartial();
         $this->response->shouldReceive('getRedirectMethod')->andReturn('POST');
         $this->response->shouldReceive('getRedirectData')->andReturn($data);
@@ -106,6 +106,11 @@ class AbstractResponseTest_MockRedirectResponse extends AbstractResponse impleme
         return 'https://example.com/redirect?a=1&b=2';
     }
 
-    public function getRedirectMethod() {}
-    public function getRedirectData() {}
+    public function getRedirectMethod()
+    {
+    }
+
+    public function getRedirectData()
+    {
+    }
 }

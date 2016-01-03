@@ -55,7 +55,7 @@ class HelperTest extends TestCase
         $target->shouldReceive('setName')->once()->with('adrian');
         $target->shouldReceive('setNumber')->once()->with('1234');
 
-        Helper::initialize($target, array('name' => 'adrian', 'number' => '1234'));
+        Helper::initialize($target, ['name' => 'adrian', 'number' => '1234']);
     }
 
     public function testInitializeIgnoresInvalidParameters()
@@ -63,7 +63,7 @@ class HelperTest extends TestCase
         $target = m::mock('\Omnipay\Common\CreditCard');
         $target->shouldReceive('setName')->once()->with('adrian');
 
-        Helper::initialize($target, array('name' => 'adrian', 'extra' => 'invalid'));
+        Helper::initialize($target, ['name' => 'adrian', 'extra' => 'invalid']);
     }
 
     public function testGetGatewayShortNameSimple()
@@ -97,7 +97,7 @@ class HelperTest extends TestCase
     }
 
     /**
-     * Type with namespace should simply be returned as is
+     * Type with namespace should simply be returned as is.
      */
     public function testGetGatewayClassNameExistingNamespace()
     {
@@ -106,7 +106,7 @@ class HelperTest extends TestCase
     }
 
     /**
-     * Type with namespace marker should be left intact, even if it contains an underscore
+     * Type with namespace marker should be left intact, even if it contains an underscore.
      */
     public function testGetGatewayClassNameExistingNamespaceUnderscore()
     {
@@ -127,7 +127,7 @@ class HelperTest extends TestCase
     }
 
     /**
-     * Underscored types should be resolved in a PSR-0 fashion
+     * Underscored types should be resolved in a PSR-0 fashion.
      */
     public function testGetGatewayClassNameUnderscoreNamespace()
     {

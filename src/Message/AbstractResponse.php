@@ -34,7 +34,7 @@ abstract class AbstractResponse extends baseAbstractResponse implements Redirect
     {
         $request = $this->getRequest();
 
-        return ($request instanceof AuthorizeRequest);
+        return $request instanceof AuthorizeRequest;
     }
 
     public function getRedirectUrl()
@@ -56,7 +56,7 @@ abstract class AbstractResponse extends baseAbstractResponse implements Redirect
 
     public function redirect()
     {
-        if (! headers_sent()) {
+        if (!headers_sent()) {
             header('Content-Type: text/html; charset=UTF-8');
         }
 

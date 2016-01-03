@@ -5,7 +5,6 @@ namespace Omnipay\Common;
 use Mockery as m;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Tests\TestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class AbstractGatewayTest extends TestCase
 {
@@ -17,10 +16,10 @@ class AbstractGatewayTest extends TestCase
 
     public function testConstruct()
     {
-        $this->gateway = new AbstractGatewayTest_MockAbstractGateway;
+        $this->gateway = new AbstractGatewayTest_MockAbstractGateway();
         $this->assertInstanceOf('\Guzzle\Http\Client', $this->gateway->getProtectedHttpClient());
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Request', $this->gateway->getProtectedHttpRequest());
-        $this->assertSame(array(), $this->gateway->getParameters());
+        $this->assertSame([], $this->gateway->getParameters());
     }
 
     public function testGetShortName()
@@ -30,45 +29,45 @@ class AbstractGatewayTest extends TestCase
 
     public function testInitializeDefaults()
     {
-        $defaults = array(
+        $defaults = [
             'currency' => 'AUD', // fixed default type
-            'username' => array('joe', 'fred'), // enum default type
-        );
+            'username' => ['joe', 'fred'], // enum default type
+        ];
         $this->gateway->shouldReceive('getDefaultParameters')->once()
             ->andReturn($defaults);
 
         $this->gateway->initialize();
 
-        $expected = array(
+        $expected = [
             'currency' => 'AUD',
             'username' => 'joe',
-        );
+        ];
         $this->assertSame($expected, $this->gateway->getParameters());
     }
 
     public function testInitializeParameters()
     {
         $this->gateway->shouldReceive('getDefaultParameters')->once()
-            ->andReturn(array('currency' => 'AUD'));
+            ->andReturn(['currency' => 'AUD']);
 
-        $this->gateway->initialize(array(
+        $this->gateway->initialize([
             'currency' => 'USD',
-            'unknown' => '42',
-        ));
+            'unknown'  => '42',
+        ]);
 
-        $this->assertSame(array('currency' => 'USD'), $this->gateway->getParameters());
+        $this->assertSame(['currency' => 'USD'], $this->gateway->getParameters());
     }
 
     public function testGetDefaultParameters()
     {
-        $this->assertSame(array(), $this->gateway->getDefaultParameters());
+        $this->assertSame([], $this->gateway->getDefaultParameters());
     }
 
     public function testGetParameters()
     {
         $this->gateway->setTestMode(true);
 
-        $this->assertSame(array('testMode' => true), $this->gateway->getParameters());
+        $this->assertSame(['testMode' => true], $this->gateway->getParameters());
     }
 
     public function testTestMode()
@@ -135,13 +134,13 @@ class AbstractGatewayTest extends TestCase
 
     public function testCreateRequest()
     {
-        $this->gateway = new AbstractGatewayTest_MockAbstractGateway;
+        $this->gateway = new AbstractGatewayTest_MockAbstractGateway();
         $request = $this->gateway->callCreateRequest(
             '\Omnipay\Common\AbstractGatewayTest_MockAbstractRequest',
-            array('currency' => 'THB')
+            ['currency' => 'THB']
         );
 
-        $this->assertSame(array('currency' => 'THB'), $request->getParameters());
+        $this->assertSame(['currency' => 'THB'], $request->getParameters());
     }
 }
 
@@ -170,6 +169,11 @@ class AbstractGatewayTest_MockAbstractGateway extends AbstractGateway
 
 class AbstractGatewayTest_MockAbstractRequest extends AbstractRequest
 {
-    public function getData() {}
-    public function sendData($data) {}
+    public function getData()
+    {
+    }
+
+    public function sendData($data)
+    {
+    }
 }

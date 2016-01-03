@@ -67,9 +67,9 @@ class Helper extends baseHelper
         $data = [];
 
         $aliases = [
-            'amount' => 'TotalAmount',
-            'description' => 'TradeDesc',
-            'transactionId' => 'TradeNo',
+            'amount'               => 'TotalAmount',
+            'description'          => 'TradeDesc',
+            'transactionId'        => 'TradeNo',
             'transactionReference' => 'MerchantTradeNo',
         ];
 
@@ -83,11 +83,11 @@ class Helper extends baseHelper
                     $items = [];
                     foreach ($value as $item) {
                         $items[] = [
-                            'Name' => $item->getName(),
-                            'Price' => $item->getPrice(),
+                            'Name'     => $item->getName(),
+                            'Price'    => $item->getPrice(),
                             'Currency' => static::currencyAlias($item->getCurrency()),
                             'Quantity' => $item->getQuantity(),
-                            'URL' => $item->getUrl(),
+                            'URL'      => $item->getUrl(),
                         ];
                     }
                     $data['Items'] = $items;

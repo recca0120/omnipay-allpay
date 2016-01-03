@@ -30,7 +30,7 @@ abstract class AbstractRequest extends baseAbstractRequest
 
     public function setItems($items)
     {
-        if ($items && ! $items instanceof ItemBag) {
+        if ($items && !$items instanceof ItemBag) {
             $items = new ItemBag($items);
         }
 

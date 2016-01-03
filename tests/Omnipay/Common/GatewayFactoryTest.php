@@ -14,12 +14,12 @@ class GatewayFactoryTest extends TestCase
 
     public function setUp()
     {
-        $this->factory = new GatewayFactory;
+        $this->factory = new GatewayFactory();
     }
 
     public function testReplace()
     {
-        $gateways = array('Foo');
+        $gateways = ['Foo'];
         $this->factory->replace($gateways);
 
         $this->assertSame($gateways, $this->factory->all());
@@ -29,7 +29,7 @@ class GatewayFactoryTest extends TestCase
     {
         $this->factory->register('Bar');
 
-        $this->assertSame(array('Bar'), $this->factory->all());
+        $this->assertSame(['Bar'], $this->factory->all());
     }
 
     public function testRegisterExistingGateway()
@@ -38,14 +38,14 @@ class GatewayFactoryTest extends TestCase
         $this->factory->register('Bar');
         $this->factory->register('Bar');
 
-        $this->assertSame(array('Milky', 'Bar'), $this->factory->all());
+        $this->assertSame(['Milky', 'Bar'], $this->factory->all());
     }
 
     public function testFindRegistersAvailableGateways()
     {
         $this->factory = m::mock('Omnipay\Common\GatewayFactory[getSupportedGateways]');
         $this->factory->shouldReceive('getSupportedGateways')->once()
-            ->andReturn(array('SpareChange_Test'));
+            ->andReturn(['SpareChange_Test']);
 
         $gateways = $this->factory->find();
 
@@ -57,7 +57,7 @@ class GatewayFactoryTest extends TestCase
     {
         $this->factory = m::mock('Omnipay\Common\GatewayFactory[getSupportedGateways]');
         $this->factory->shouldReceive('getSupportedGateways')->once()
-            ->andReturn(array('SpareChange_Gone'));
+            ->andReturn(['SpareChange_Gone']);
 
         $gateways = $this->factory->find();
 
